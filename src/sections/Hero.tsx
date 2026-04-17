@@ -116,7 +116,7 @@ export default function Hero() {
       <div style={content}>
         <div style={avatarWrap}>
           <img
-            src="/portfolio/images/profile.png"
+            src="/images/profile.png"
             alt="Vitor Piovezan"
             style={avatarImg}
           />

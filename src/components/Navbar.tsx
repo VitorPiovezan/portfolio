@@ -73,14 +73,13 @@ export default function Navbar() {
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden"
+          className="md:hidden flex"
           style={{
             color: '#94a3b8',
             background: 'none',
             border: 'none',
             cursor: 'pointer',
             padding: 8,
-            display: 'flex',
           }}
           aria-label="Toggle menu"
         >
