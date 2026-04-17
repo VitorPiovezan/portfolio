@@ -28,9 +28,28 @@ const content: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: 28,
+  gap: 24,
   maxWidth: 720,
   textAlign: 'center',
+};
+
+const avatarWrap: React.CSSProperties = {
+  width: 140,
+  height: 140,
+  borderRadius: '50%',
+  padding: 3,
+  background: 'linear-gradient(135deg, #8b5cf6, #ec4899, #6d28d9)',
+  marginBottom: 8,
+};
+
+const avatarImg: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+  borderRadius: '50%',
+  objectFit: 'cover',
+  objectPosition: 'center top',
+  display: 'block',
+  backgroundColor: '#8b5cf6',
 };
 
 const roleRow: React.CSSProperties = {
@@ -95,6 +114,14 @@ export default function Hero() {
       </div>
 
       <div style={content}>
+        <div style={avatarWrap}>
+          <img
+            src="/portfolio/images/profile.png"
+            alt="Vitor Piovezan"
+            style={avatarImg}
+          />
+        </div>
+
         <BlurText
           text={personalInfo.name}
           className="text-5xl md:text-7xl font-bold tracking-tight"
