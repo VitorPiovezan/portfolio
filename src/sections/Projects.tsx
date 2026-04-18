@@ -1,6 +1,7 @@
 import FadeIn from '../components/FadeIn';
 import CodeEditor from '../components/CodeEditor';
 import Particles from '../components/Particles';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const section: React.CSSProperties = {
   position: 'relative',
@@ -26,22 +27,26 @@ const h2Style: React.CSSProperties = {
 };
 
 export default function Projects() {
+  const isMobile = useIsMobile();
+
   return (
     <section id="projects" style={section}>
-      <div style={bgLayer}>
-        <Particles
-          particleCount={80}
-          particleSpread={10}
-          speed={0.03}
-          particleColors={['#ec4899', '#f472b6', '#a855f7']}
-          particleBaseSize={60}
-          sizeRandomness={0.6}
-          cameraDistance={30}
-          alphaParticles
-          moveParticlesOnHover
-          particleHoverFactor={0.3}
-        />
-      </div>
+      {!isMobile && (
+        <div style={bgLayer}>
+          <Particles
+            particleCount={80}
+            particleSpread={10}
+            speed={0.03}
+            particleColors={['#ec4899', '#f472b6', '#a855f7']}
+            particleBaseSize={60}
+            sizeRandomness={0.6}
+            cameraDistance={30}
+            alphaParticles
+            moveParticlesOnHover
+            particleHoverFactor={0.3}
+          />
+        </div>
+      )}
       <div style={wrap}>
         <FadeIn>
           <h2 style={h2Style}>Projetos</h2>

@@ -1,6 +1,7 @@
 import FadeIn from '../components/FadeIn';
 import AIChatSimulator from '../components/AIChatSimulator';
 import Aurora from '../components/Aurora';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const section: React.CSSProperties = {
   position: 'relative',
@@ -27,16 +28,20 @@ const h2Style: React.CSSProperties = {
 };
 
 export default function About() {
+  const isMobile = useIsMobile();
+
   return (
     <section id="about" style={section}>
-      <div style={bgLayer}>
-        <Aurora
-          colorStops={['#0c4a6e', '#164e63', '#1e1b4b']}
-          amplitude={0.6}
-          blend={0.7}
-          speed={0.2}
-        />
-      </div>
+      {!isMobile && (
+        <div style={bgLayer}>
+          <Aurora
+            colorStops={['#0c4a6e', '#164e63', '#1e1b4b']}
+            amplitude={0.6}
+            blend={0.7}
+            speed={0.2}
+          />
+        </div>
+      )}
       <div style={wrap}>
         <FadeIn>
           <h2 style={h2Style}>Sobre Mim</h2>

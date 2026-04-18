@@ -3,6 +3,7 @@ import Magnet from '../components/Magnet';
 import GradientText from '../components/GradientText';
 import Aurora from '../components/Aurora';
 import { personalInfo } from '../data/portfolio';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const socialLinks = [
   {
@@ -58,16 +59,20 @@ const iconLink: React.CSSProperties = {
 };
 
 export default function Contact() {
+  const isMobile = useIsMobile();
+
   return (
     <section id="contact" style={section}>
-      <div style={bgLayer}>
-        <Aurora
-          colorStops={['#4c1d95', '#be185d', '#1e1b4b']}
-          amplitude={0.5}
-          blend={0.8}
-          speed={0.15}
-        />
-      </div>
+      {!isMobile && (
+        <div style={bgLayer}>
+          <Aurora
+            colorStops={['#4c1d95', '#be185d', '#1e1b4b']}
+            amplitude={0.5}
+            blend={0.8}
+            speed={0.15}
+          />
+        </div>
+      )}
       <div style={wrap}>
         <FadeIn>
           <GradientText

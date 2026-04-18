@@ -2,6 +2,7 @@ import FadeIn from '../components/FadeIn';
 import ScrollVelocity from '../components/ScrollVelocity';
 import TerminalTUI from '../components/TerminalTUI';
 import Aurora from '../components/Aurora';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const wrap: React.CSSProperties = {
   padding: '120px 0',
@@ -40,16 +41,20 @@ const scrollWrap: React.CSSProperties = {
 };
 
 export default function TechSection() {
+  const isMobile = useIsMobile();
+
   return (
     <section id="tech" style={wrap}>
-      <div style={bgLayer}>
-        <Aurora
-          colorStops={['#3b0764', '#6d28d9', '#1e1b4b']}
-          amplitude={0.8}
-          blend={0.6}
-          speed={0.3}
-        />
-      </div>
+      {!isMobile && (
+        <div style={bgLayer}>
+          <Aurora
+            colorStops={['#3b0764', '#6d28d9', '#1e1b4b']}
+            amplitude={0.8}
+            blend={0.6}
+            speed={0.3}
+          />
+        </div>
+      )}
 
       <div style={inner}>
         <FadeIn>

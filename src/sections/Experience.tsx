@@ -1,6 +1,7 @@
 import FadeIn from '../components/FadeIn';
 import GitTimeline from '../components/GitTimeline';
 import Particles from '../components/Particles';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const section: React.CSSProperties = {
   position: 'relative',
@@ -26,22 +27,26 @@ const h2Style: React.CSSProperties = {
 };
 
 export default function Experience() {
+  const isMobile = useIsMobile();
+
   return (
     <section id="experience" style={section}>
-      <div style={bgLayer}>
-        <Particles
-          particleCount={60}
-          particleSpread={8}
-          speed={0.02}
-          particleColors={['#22d3ee', '#06b6d4', '#0891b2']}
-          particleBaseSize={50}
-          sizeRandomness={0.5}
-          cameraDistance={30}
-          alphaParticles
-          moveParticlesOnHover
-          particleHoverFactor={0.2}
-        />
-      </div>
+      {!isMobile && (
+        <div style={bgLayer}>
+          <Particles
+            particleCount={60}
+            particleSpread={8}
+            speed={0.02}
+            particleColors={['#22d3ee', '#06b6d4', '#0891b2']}
+            particleBaseSize={50}
+            sizeRandomness={0.5}
+            cameraDistance={30}
+            alphaParticles
+            moveParticlesOnHover
+            particleHoverFactor={0.2}
+          />
+        </div>
+      )}
       <div style={wrap}>
         <FadeIn>
           <h2 style={h2Style}>Experiência</h2>

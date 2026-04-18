@@ -4,6 +4,7 @@ import Particles from '../components/Particles';
 import TiltWrapper from '../components/TiltWrapper';
 import Magnet from '../components/Magnet';
 import { personalInfo, rotatingRoles } from '../data/portfolio';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const section: React.CSSProperties = {
   position: 'relative',
@@ -98,22 +99,26 @@ const arrow: React.CSSProperties = {
 };
 
 export default function Hero() {
+  const isMobile = useIsMobile();
+
   return (
     <section style={section}>
-      <div style={particlesWrap}>
-        <Particles
-          particleCount={150}
-          particleSpread={12}
-          speed={0.05}
-          particleColors={['#8b5cf6', '#a78bfa', '#6d28d9']}
-          particleBaseSize={80}
-          sizeRandomness={0.8}
-          cameraDistance={25}
-          alphaParticles
-          moveParticlesOnHover
-          particleHoverFactor={0.4}
-        />
-      </div>
+      {!isMobile && (
+        <div style={particlesWrap}>
+          <Particles
+            particleCount={150}
+            particleSpread={12}
+            speed={0.05}
+            particleColors={['#8b5cf6', '#a78bfa', '#6d28d9']}
+            particleBaseSize={80}
+            sizeRandomness={0.8}
+            cameraDistance={25}
+            alphaParticles
+            moveParticlesOnHover
+            particleHoverFactor={0.4}
+          />
+        </div>
+      )}
 
       <TiltWrapper
         rotateAmplitude={6}
