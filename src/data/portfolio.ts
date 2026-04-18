@@ -3,7 +3,7 @@ export const personalInfo = {
   role: 'Product Engineer & AI Engineer',
   company: 'Árvore',
   location: 'Monte Alto, SP - Brasil',
-  bio: 'Product Engineer e AI Engineer construindo aplicações web, mobile e experiências com inteligência artificial. Combino front-end de alta performance com soluções de IA para criar produtos que realmente fazem diferença na experiência do usuário.',
+  bio: 'Product Engineer e AI Engineer criando produtos end-to-end, estruturando sistemas completos com IA no core e foco direto em impacto real no produto e na experiência do usuário.',
   email: '[email]',
   github: 'https://github.com/VitorPiovezan',
   linkedin: 'https://www.linkedin.com/in/vitor-piovezan-6a65351aa/',
@@ -58,7 +58,7 @@ export const experiences: Experience[] = [
     role: 'Product Engineer & AI Engineer',
     period: 'Atual',
     description:
-      'Desenvolvimento de produtos educacionais com foco em expansão e retenção de usuários. Construção de interfaces performáticas e acessíveis com React.js. Integração de soluções de IA para leitura narrada, chat inteligente com dados da plataforma e ferramentas de produtividade com LLMs.',
+      'Desenvolvimento de produtos educacionais de ponta a ponta, da ideia à entrega. Construção de interfaces performáticas com React.js e Next.js, APIs com Elixir e integrações com GraphQL. Implementação de soluções de IA como leitura narrada com TTS, chat inteligente com RAG e MCP servers customizados para automação de workflows.',
     techs: [
       'React.js',
       'TypeScript',
@@ -72,27 +72,48 @@ export const experiences: Experience[] = [
   },
   {
     company: 'Agência Olcan',
-    role: 'Designer Web',
+    role: 'Designer Web & Desenvolvedor Front-End',
     period: 'abr 2021 - set 2021',
     description:
-      'Desenvolvimento de sites utilizando React.js. Atuação como autônomo com design gráfico e Adobe Photoshop.',
-    techs: ['React.js', 'Design Gráfico', 'Adobe Photoshop'],
+      'Desenvolvimento de sites completos utilizando React.js como autônomo. Responsável por todo o ciclo: desde o design gráfico e prototipação no Adobe Photoshop até a implementação front-end. Criação de layouts responsivos e experiências visuais para clientes da agência.',
+    techs: [
+      'React.js',
+      'CSS',
+      'Design Gráfico',
+      'Adobe Photoshop',
+      'Responsividade',
+    ],
   },
   {
     company: 'Unimed',
     role: 'Analista de T.I. Junior',
     period: 'mar 2021 - set 2021',
     description:
-      'Implantação e regularização da LGPD (Lei Geral de Proteção de Dados). Monitoramento na implantação de aplicação web de plano de saúde hospitalar.',
-    techs: ['LGPD', 'Monitoramento', 'Aplicações Web'],
+      'Implantação e regularização da LGPD (Lei Geral de Proteção de Dados) na organização. Monitoramento na implantação de aplicação web de plano de saúde hospitalar. Manutenção de banco de dados Oracle e suporte aos sistemas UNICOO e TOTVS. Manutenção em hardware e servidores.',
+    techs: [
+      'LGPD',
+      'Oracle',
+      'TOTVS',
+      'UNICOO',
+      'Aplicações Web',
+      'Servidores',
+    ],
   },
   {
     company: 'Global X',
     role: 'Analista em T.I.',
     period: 'abr 2018 - jul 2020',
     description:
-      'Suporte em ERP (atualizações, problemas técnicos, criação de relatórios via Excel). Manutenção em servidores locais.',
-    techs: ['ERP', 'Excel', 'Servidores', 'Suporte T.I.'],
+      'Suporte em ERP com atualizações, resolução de problemas técnicos e criação de relatórios via Excel. Manutenção em servidores locais e infraestrutura de TI. Integração de ERP com E-commerce (B2B e B2C), implantação da B2W Marketing Place e gerenciamento de e-mails marketing. Geração de relatórios para tomada de decisão.',
+    techs: [
+      'ERP',
+      'Excel',
+      'E-commerce',
+      'B2B',
+      'B2C',
+      'Servidores',
+      'Marketing',
+    ],
   },
 ];
 

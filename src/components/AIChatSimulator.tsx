@@ -1,25 +1,113 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
 import { useFadeIn } from '../hooks/useFadeIn';
 
 const userMessage = 'O que sabemos sobre o Vitor?';
 
-const aiResponseText = [
-  'Vitor Piovezan é Product Engineer e AI Engineer na Árvore, atuando no squad de Expansão e Retenção em Monte Alto, SP.',
+interface TextPart {
+  text: string;
+  bold?: boolean;
+  italic?: boolean;
+}
+
+type Line = string | TextPart[];
+
+const aiLines: Line[] = [
+  [
+    { text: 'Vitor Piovezan', bold: true },
+    { text: ' é ' },
+    { text: 'Product Engineer', bold: true },
+    { text: ' e ' },
+    { text: 'AI Engineer', bold: true },
+    {
+      text: ' na Árvore, atuando de ponta a ponta — da ideia à entrega final.',
+    },
+  ],
   '',
-  'Ele combina front-end de alta performance com soluções de inteligência artificial:',
+  'Projeta e implementa sistemas completos, integrando backend, frontend e IA de forma consistente — da modelagem de dados às interfaces finais, com foco em performance, usabilidade e velocidade de entrega.',
   '',
-  '  - UI Architecture, Product Usability e React.js/React Native',
-  '  - Criação de MCP Servers customizados para integrar IA com workflows',
-  '  - Implementação de RAG para chat inteligente com dados da plataforma',
-  '  - Leitura narrada de livros usando Kokoro TTS',
-  '  - Validação pixel-perfect de páginas contra designs do Figma',
+  [
+    {
+      text: 'Seu foco está em aplicar IA de forma prática no produto',
+      bold: true,
+    },
+    {
+      text: ', criando desde pipelines com LLMs e RAG até MCP servers customizados para automatizar processos e integrar inteligência aos workflows.',
+    },
+  ],
   '',
-  'No dia a dia, usa ferramentas como Kiro, Cursor e Claude (Opus, Sonnet) para acelerar desenvolvimento. Trabalha com LLM Orchestration e Prompt Engineering.',
+  'Já desenvolveu soluções como:',
+  [
+    { text: '  - ' },
+    { text: 'Leitura narrada de livros', italic: true },
+    { text: ' com TTS' },
+  ],
+  [
+    { text: '  - ' },
+    { text: 'Chat inteligente', italic: true },
+    { text: ' com dados da plataforma' },
+  ],
+  [
+    { text: '  - ' },
+    { text: 'Ferramentas internas', italic: true },
+    { text: ' para acelerar desenvolvimento' },
+  ],
   '',
-  'No backend, tem experiência com Elixir e NestJS, e integrações com Firebase, GraphQL e MySQL.',
+  [
+    { text: 'Trabalha principalmente com ' },
+    { text: 'Next.js, Expo (React Native) e NestJS', bold: true },
+    {
+      text: ', além de explorar constantemente novas formas de orquestrar IA dentro de produtos reais.',
+    },
+  ],
   '',
-  'Contribuiu diretamente no Árvore Hub, um docker de IA para editores de texto. Tem apps publicados na App Store e Google Play.',
-].join('\n');
+  [
+    {
+      text: 'Hoje, seu foco é construir produtos completos, rápidos de iterar e com ',
+      italic: true,
+    },
+    { text: 'IA no centro da experiência.', bold: true },
+  ],
+];
+
+function linesToPlainText(lines: Line[]): string {
+  return lines
+    .map(line => {
+      if (typeof line === 'string') return line;
+      return line.map(p => p.text).join('');
+    })
+    .join('\n');
+}
+
+function renderRichLine(line: Line, key: number): ReactNode {
+  if (typeof line === 'string') return <div key={key}>{line || '\u00A0'}</div>;
+  return (
+    <div key={key}>
+      {line.map((part, i) => {
+        if (part.bold && part.italic)
+          return (
+            <strong key={i}>
+              <em>{part.text}</em>
+            </strong>
+          );
+        if (part.bold)
+          return (
+            <strong key={i} style={{ color: '#f1f5f9' }}>
+              {part.text}
+            </strong>
+          );
+        if (part.italic)
+          return (
+            <em key={i} style={{ color: '#c9d1d9' }}>
+              {part.text}
+            </em>
+          );
+        return <span key={i}>{part.text}</span>;
+      })}
+    </div>
+  );
+}
+
+const fullPlainText = linesToPlainText(aiLines);
 
 type Phase = 'user-typing' | 'thinking' | 'ai-streaming' | 'done';
 
@@ -27,7 +115,7 @@ export default function AIChatSimulator() {
   const { ref, isVisible } = useFadeIn(0.2);
   const [phase, setPhase] = useState<Phase>('user-typing');
   const [userTyped, setUserTyped] = useState('');
-  const [aiTyped, setAiTyped] = useState('');
+  const [charCount, setCharCount] = useState(0);
   const [dots, setDots] = useState('');
   const startedRef = useRef(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -35,7 +123,6 @@ export default function AIChatSimulator() {
   useEffect(() => {
     if (!isVisible || startedRef.current) return;
     startedRef.current = true;
-
     let i = 0;
     const typeInterval = setInterval(() => {
       i++;
@@ -64,15 +151,15 @@ export default function AIChatSimulator() {
 
   useEffect(() => {
     if (phase !== 'ai-streaming') return;
-    let charIndex = 0;
+    let idx = 0;
     const streamInterval = setInterval(() => {
-      charIndex += 2;
-      setAiTyped(aiResponseText.slice(0, charIndex));
-      if (charIndex >= aiResponseText.length) {
+      idx += 3;
+      setCharCount(idx);
+      if (idx >= fullPlainText.length) {
         clearInterval(streamInterval);
         setPhase('done');
       }
-    }, 15);
+    }, 12);
     return () => clearInterval(streamInterval);
   }, [phase]);
 
@@ -80,7 +167,42 @@ export default function AIChatSimulator() {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [aiTyped, dots, userTyped]);
+  }, [charCount, dots, userTyped]);
+
+  const visibleLines: Line[] = [];
+  if (phase === 'ai-streaming' || phase === 'done') {
+    let remaining = phase === 'done' ? Infinity : charCount;
+    for (const line of aiLines) {
+      if (remaining <= 0) break;
+      const plainLen =
+        typeof line === 'string'
+          ? line.length
+          : line.reduce((a, p) => a + p.text.length, 0);
+      if (remaining >= plainLen) {
+        visibleLines.push(line);
+        remaining -= plainLen + 1;
+      } else {
+        if (typeof line === 'string') {
+          visibleLines.push(line.slice(0, remaining));
+        } else {
+          const partial: TextPart[] = [];
+          let left = remaining;
+          for (const part of line) {
+            if (left <= 0) break;
+            if (part.text.length <= left) {
+              partial.push(part);
+              left -= part.text.length;
+            } else {
+              partial.push({ ...part, text: part.text.slice(0, left) });
+              left = 0;
+            }
+          }
+          visibleLines.push(partial);
+        }
+        remaining = 0;
+      }
+    }
+  }
 
   const container: React.CSSProperties = {
     backgroundColor: '#0d1117',
@@ -111,7 +233,7 @@ export default function AIChatSimulator() {
   const chatBody: React.CSSProperties = {
     padding: '24px 20px',
     minHeight: 280,
-    maxHeight: 450,
+    maxHeight: 500,
     overflowY: 'auto',
     display: 'flex',
     flexDirection: 'column',
@@ -158,7 +280,6 @@ export default function AIChatSimulator() {
     maxWidth: '85%',
     fontSize: 14,
     lineHeight: 1.7,
-    whiteSpace: 'pre-wrap',
     border: '1px solid #21262d',
   };
 
@@ -207,7 +328,7 @@ export default function AIChatSimulator() {
               )}
               {(phase === 'ai-streaming' || phase === 'done') && (
                 <>
-                  {aiTyped}
+                  {visibleLines.map((line, i) => renderRichLine(line, i))}
                   {phase === 'ai-streaming' && (
                     <span
                       style={{

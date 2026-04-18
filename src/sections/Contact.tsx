@@ -95,7 +95,7 @@ export default function Contact() {
         <FadeIn delay={0.2}>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 32 }}>
             {socialLinks.map(link => (
-              <Magnet key={link.label} padding={80} magnetStrength={2}>
+              <Magnet key={link.label} padding={15} magnetStrength={6}>
                 <a
                   href={link.href}
                   target="_blank"

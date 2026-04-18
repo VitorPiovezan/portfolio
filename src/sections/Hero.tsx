@@ -2,6 +2,7 @@ import BlurText from '../components/BlurText';
 import GradientText from '../components/GradientText';
 import RotatingText from '../components/RotatingText';
 import Particles from '../components/Particles';
+import TiltWrapper from '../components/TiltWrapper';
 import Magnet from '../components/Magnet';
 import { personalInfo, rotatingRoles } from '../data/portfolio';
 
@@ -22,15 +23,18 @@ const particlesWrap: React.CSSProperties = {
   zIndex: 0,
 };
 
-const content: React.CSSProperties = {
-  position: 'relative',
-  zIndex: 10,
+const card: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   gap: 24,
   maxWidth: 720,
   textAlign: 'center',
+  padding: '48px 40px',
+  borderRadius: 24,
+  border: 'none',
+  background: 'rgba(10,10,15,0.5)',
+  backdropFilter: 'none',
 };
 
 const avatarWrap: React.CSSProperties = {
@@ -39,7 +43,6 @@ const avatarWrap: React.CSSProperties = {
   borderRadius: '50%',
   padding: 3,
   background: 'linear-gradient(135deg, #8b5cf6, #ec4899, #6d28d9)',
-  marginBottom: 8,
 };
 
 const avatarImg: React.CSSProperties = {
@@ -63,7 +66,7 @@ const roleRow: React.CSSProperties = {
 const btnRow: React.CSSProperties = {
   display: 'flex',
   gap: 32,
-  marginTop: 16,
+  marginTop: 8,
 };
 
 const btnPrimary: React.CSSProperties = {
@@ -113,71 +116,77 @@ export default function Hero() {
         />
       </div>
 
-      <div style={content}>
-        <div style={avatarWrap}>
-          <img
-            src="/images/profile.png"
-            alt="Vitor Piovezan"
-            style={avatarImg}
-          />
-        </div>
-
-        <BlurText
-          text={personalInfo.name}
-          className="text-5xl md:text-7xl font-bold tracking-tight"
-          delay={100}
-          animateBy="letters"
-        />
-
-        <div style={roleRow}>
-          <span>Sou</span>
-          <GradientText
-            colors={['#8b5cf6', '#ec4899', '#8b5cf6']}
-            animationSpeed={4}
-            className="text-xl md:text-2xl font-semibold"
-          >
-            <RotatingText
-              texts={rotatingRoles}
-              rotationInterval={2500}
-              staggerDuration={0.03}
-              staggerFrom="first"
-              mainClassName="inline-flex"
-              transition={{ type: 'spring', damping: 30, stiffness: 400 }}
+      <TiltWrapper
+        rotateAmplitude={6}
+        scaleOnHover={1.02}
+        style={{ position: 'relative', zIndex: 10 }}
+      >
+        <div style={card}>
+          <div style={avatarWrap}>
+            <img
+              src="/images/profile.png"
+              alt="Vitor Piovezan"
+              style={avatarImg}
             />
-          </GradientText>
-        </div>
+          </div>
 
-        <BlurText
-          text={personalInfo.bio}
-          className="text-base md:text-lg leading-relaxed"
-          delay={30}
-          animateBy="words"
-          direction="bottom"
-        />
+          <BlurText
+            text={personalInfo.name}
+            className="text-5xl md:text-7xl font-bold tracking-tight"
+            delay={100}
+            animateBy="letters"
+          />
 
-        <div style={btnRow}>
-          <Magnet padding={20} magnetStrength={6}>
-            <a
-              href={personalInfo.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={btnPrimary}
+          <div style={roleRow}>
+            <span>Sou</span>
+            <GradientText
+              colors={['#8b5cf6', '#ec4899', '#8b5cf6']}
+              animationSpeed={4}
+              className="text-xl md:text-2xl font-semibold"
             >
-              GitHub
-            </a>
-          </Magnet>
-          <Magnet padding={20} magnetStrength={6}>
-            <a
-              href={personalInfo.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={btnSecondary}
-            >
-              LinkedIn
-            </a>
-          </Magnet>
+              <RotatingText
+                texts={rotatingRoles}
+                rotationInterval={2500}
+                staggerDuration={0.03}
+                staggerFrom="first"
+                mainClassName="inline-flex"
+                transition={{ type: 'spring', damping: 30, stiffness: 400 }}
+              />
+            </GradientText>
+          </div>
+
+          <BlurText
+            text={personalInfo.bio}
+            className="text-base md:text-lg leading-relaxed"
+            delay={30}
+            animateBy="words"
+            direction="bottom"
+          />
+
+          <div style={btnRow}>
+            <Magnet padding={20} magnetStrength={6}>
+              <a
+                href={personalInfo.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={btnPrimary}
+              >
+                GitHub
+              </a>
+            </Magnet>
+            <Magnet padding={20} magnetStrength={6}>
+              <a
+                href={personalInfo.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={btnSecondary}
+              >
+                LinkedIn
+              </a>
+            </Magnet>
+          </div>
         </div>
-      </div>
+      </TiltWrapper>
 
       <div style={arrow} className="animate-bounce">
         <svg
