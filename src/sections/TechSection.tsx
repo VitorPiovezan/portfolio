@@ -3,6 +3,7 @@ import ScrollVelocity from '../components/ScrollVelocity';
 import TerminalTUI from '../components/TerminalTUI';
 import Aurora from '../components/Aurora';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useI18n } from '../i18n/context';
 
 const wrap: React.CSSProperties = {
   padding: '120px 0',
@@ -42,6 +43,7 @@ const scrollWrap: React.CSSProperties = {
 
 export default function TechSection() {
   const isMobile = useIsMobile();
+  const { t } = useI18n();
 
   return (
     <section id="tech" style={wrap}>
@@ -58,10 +60,8 @@ export default function TechSection() {
 
       <div style={inner}>
         <FadeIn>
-          <h2 style={h2Style}>Tech Stack</h2>
-          <p style={subStyle}>
-            Tecnologias que uso no dia a dia para construir produtos.
-          </p>
+          <h2 style={h2Style}>{t.tech.title}</h2>
+          <p style={subStyle}>{t.tech.subtitle}</p>
         </FadeIn>
       </div>
 

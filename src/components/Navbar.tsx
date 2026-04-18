@@ -1,15 +1,33 @@
 import { useState } from 'react';
-
-const navLinks = [
-  { label: 'Sobre', href: '#about' },
-  { label: 'Tech', href: '#tech' },
-  { label: 'Experiência', href: '#experience' },
-  { label: 'Projetos', href: '#projects' },
-  { label: 'Contato', href: '#contact' },
-];
+import { useI18n } from '../i18n/context';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { locale, setLocale, t } = useI18n();
+
+  const navLinks = [
+    { label: t.nav.about, href: '#about' },
+    { label: t.nav.tech, href: '#tech' },
+    { label: t.nav.experience, href: '#experience' },
+    { label: t.nav.projects, href: '#projects' },
+    { label: t.nav.contact, href: '#contact' },
+  ];
+
+  const toggleLocale = () => {
+    setLocale(locale === 'pt-BR' ? 'en-US' : 'pt-BR');
+  };
+
+  const langBtn: React.CSSProperties = {
+    background: 'none',
+    border: '1px solid #1e1e2e',
+    color: '#94a3b8',
+    padding: '4px 10px',
+    borderRadius: 6,
+    fontSize: 12,
+    cursor: 'pointer',
+    fontWeight: 500,
+    transition: 'border-color 0.2s, color 0.2s',
+  };
 
   return (
     <nav
@@ -50,11 +68,11 @@ export default function Navbar() {
 
         <div
           className="hidden md:flex"
-          style={{ alignItems: 'center', gap: 32 }}
+          style={{ alignItems: 'center', gap: 28 }}
         >
           {navLinks.map(link => (
             <a
-              key={link.label}
+              key={link.href}
               href={link.href}
               style={{
                 color: '#94a3b8',
@@ -69,35 +87,56 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <button
+            onClick={toggleLocale}
+            style={langBtn}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = '#8b5cf6';
+              e.currentTarget.style.color = '#8b5cf6';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = '#1e1e2e';
+              e.currentTarget.style.color = '#94a3b8';
+            }}
+          >
+            {locale === 'pt-BR' ? 'EN' : 'PT'}
+          </button>
         </div>
 
-        <button
-          onClick={() => setIsOpen(!isOpen)}
+        <div
           className="md:hidden flex"
-          style={{
-            color: '#94a3b8',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: 8,
-          }}
-          aria-label="Toggle menu"
+          style={{ alignItems: 'center', gap: 12 }}
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
+          <button onClick={toggleLocale} style={langBtn}>
+            {locale === 'pt-BR' ? 'EN' : 'PT'}
+          </button>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            style={{
+              color: '#94a3b8',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 8,
+            }}
+            aria-label="Toggle menu"
           >
-            {isOpen ? (
-              <path d="M18 6L6 18M6 6l12 12" />
-            ) : (
-              <path d="M3 12h18M3 6h18M3 18h18" />
-            )}
-          </svg>
-        </button>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              {isOpen ? (
+                <path d="M18 6L6 18M6 6l12 12" />
+              ) : (
+                <path d="M3 12h18M3 6h18M3 18h18" />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
       {isOpen && (
@@ -118,7 +157,7 @@ export default function Navbar() {
           >
             {navLinks.map(link => (
               <a
-                key={link.label}
+                key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
                 style={{

@@ -2,6 +2,7 @@ import FadeIn from '../components/FadeIn';
 import CodeEditor from '../components/CodeEditor';
 import Particles from '../components/Particles';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useI18n } from '../i18n/context';
 
 const section: React.CSSProperties = {
   position: 'relative',
@@ -28,6 +29,7 @@ const h2Style: React.CSSProperties = {
 
 export default function Projects() {
   const isMobile = useIsMobile();
+  const { t } = useI18n();
 
   return (
     <section id="projects" style={section}>
@@ -49,7 +51,7 @@ export default function Projects() {
       )}
       <div style={wrap}>
         <FadeIn>
-          <h2 style={h2Style}>Projetos</h2>
+          <h2 style={h2Style}>{t.projects.title}</h2>
         </FadeIn>
         <FadeIn delay={0.1}>
           <CodeEditor />

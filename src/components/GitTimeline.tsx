@@ -1,29 +1,36 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useFadeIn } from '../hooks/useFadeIn';
-import { experiences } from '../data/portfolio';
+import { useI18n } from '../i18n/context';
 
 function randomHash() {
   return Math.random().toString(16).slice(2, 9);
 }
 
-const commits = experiences.map((exp, i) => ({
-  hash: randomHash(),
-  branch: i === 0 ? 'main' : `feature/career-${i}`,
-  date: exp.period,
-  author: 'Vitor Piovezan',
-  message: `${exp.role} @ ${exp.company}`,
-  description: exp.description,
-  techs: exp.techs,
-  isCurrent: i === 0,
-}));
+const hashes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => randomHash());
 
 type Phase = 'typing' | 'output';
 
 export default function GitTimeline() {
   const { ref, isVisible } = useFadeIn(0.2);
+  const { t } = useI18n();
   const [phase, setPhase] = useState<Phase>('typing');
   const [typed, setTyped] = useState('');
   const [visibleCommits, setVisibleCommits] = useState(0);
+
+  const commits = useMemo(
+    () =>
+      t.experiences.map((exp, i) => ({
+        hash: hashes[i] || randomHash(),
+        branch: i === 0 ? 'main' : `feature/career-${i}`,
+        date: exp.period,
+        author: 'Vitor Piovezan',
+        message: `${exp.role} @ ${exp.company}`,
+        description: exp.description,
+        techs: exp.techs,
+        isCurrent: i === 0,
+      })),
+    [t.experiences],
+  );
   const startedRef = useRef(false);
   const command = 'git log --graph --oneline --all --career';
 

@@ -2,6 +2,7 @@ import FadeIn from '../components/FadeIn';
 import GitTimeline from '../components/GitTimeline';
 import Particles from '../components/Particles';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useI18n } from '../i18n/context';
 
 const section: React.CSSProperties = {
   position: 'relative',
@@ -28,6 +29,7 @@ const h2Style: React.CSSProperties = {
 
 export default function Experience() {
   const isMobile = useIsMobile();
+  const { t } = useI18n();
 
   return (
     <section id="experience" style={section}>
@@ -49,7 +51,7 @@ export default function Experience() {
       )}
       <div style={wrap}>
         <FadeIn>
-          <h2 style={h2Style}>Experiência</h2>
+          <h2 style={h2Style}>{t.experience.title}</h2>
         </FadeIn>
         <FadeIn delay={0.1}>
           <GitTimeline />

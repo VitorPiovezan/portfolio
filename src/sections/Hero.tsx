@@ -3,8 +3,9 @@ import TextType from '../components/TextType';
 import Particles from '../components/Particles';
 import TiltWrapper from '../components/TiltWrapper';
 import Magnet from '../components/Magnet';
-import { personalInfo, rotatingRoles } from '../data/portfolio';
+import { personalInfo } from '../data/portfolio';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useI18n } from '../i18n/context';
 
 const section: React.CSSProperties = {
   position: 'relative',
@@ -100,6 +101,7 @@ const arrow: React.CSSProperties = {
 
 export default function Hero() {
   const isMobile = useIsMobile();
+  const { t } = useI18n();
 
   return (
     <section style={section}>
@@ -142,9 +144,9 @@ export default function Hero() {
           />
 
           <div style={roleRow}>
-            <span>Sou</span>
+            <span>{t.hero.iam}</span>
             <TextType
-              text={rotatingRoles}
+              text={t.hero.roles as unknown as string[]}
               typingSpeed={60}
               deletingSpeed={40}
               pauseDuration={2000}
@@ -158,7 +160,7 @@ export default function Hero() {
           </div>
 
           <BlurText
-            text={personalInfo.bio}
+            text={t.hero.bio}
             className="text-base md:text-lg leading-relaxed"
             delay={30}
             animateBy="words"

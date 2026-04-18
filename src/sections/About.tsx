@@ -2,6 +2,7 @@ import FadeIn from '../components/FadeIn';
 import AIChatSimulator from '../components/AIChatSimulator';
 import Aurora from '../components/Aurora';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useI18n } from '../i18n/context';
 
 const section: React.CSSProperties = {
   position: 'relative',
@@ -29,6 +30,7 @@ const h2Style: React.CSSProperties = {
 
 export default function About() {
   const isMobile = useIsMobile();
+  const { t } = useI18n();
 
   return (
     <section id="about" style={section}>
@@ -44,7 +46,7 @@ export default function About() {
       )}
       <div style={wrap}>
         <FadeIn>
-          <h2 style={h2Style}>Sobre Mim</h2>
+          <h2 style={h2Style}>{t.about.title}</h2>
         </FadeIn>
         <FadeIn delay={0.1}>
           <AIChatSimulator />

@@ -4,6 +4,7 @@ import GradientText from '../components/GradientText';
 import Aurora from '../components/Aurora';
 import { personalInfo } from '../data/portfolio';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useI18n } from '../i18n/context';
 
 const socialLinks = [
   {
@@ -60,6 +61,7 @@ const iconLink: React.CSSProperties = {
 
 export default function Contact() {
   const isMobile = useIsMobile();
+  const { t } = useI18n();
 
   return (
     <section id="contact" style={section}>
@@ -80,7 +82,7 @@ export default function Contact() {
             animationSpeed={6}
             className="text-3xl md:text-4xl font-bold"
           >
-            Vamos conversar?
+            {t.contact.title}
           </GradientText>
         </FadeIn>
         <FadeIn delay={0.1}>
@@ -93,8 +95,7 @@ export default function Contact() {
               fontSize: 16,
             }}
           >
-            Estou sempre aberto a novas oportunidades, colaborações e conversas
-            sobre tecnologia. Fique à vontade para entrar em contato.
+            {t.contact.description}
           </p>
         </FadeIn>
         <FadeIn delay={0.2}>

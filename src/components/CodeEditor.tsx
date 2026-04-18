@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { projects } from '../data/portfolio';
+import { useState, useMemo } from 'react';
+import { useI18n } from '../i18n/context';
 
-const fileNames = projects.map(p => {
-  const slug = p.title
+function slugify(title: string) {
+  return title
     .toLowerCase()
     .replace(/[áàã]/g, 'a')
     .replace(/[éê]/g, 'e')
@@ -12,8 +12,7 @@ const fileNames = projects.map(p => {
     .replace(/[ç]/g, 'c')
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9-]/g, '');
-  return `${slug}.ts`;
-});
+}
 
 function wrapText(text: string, maxLen: number): string[] {
   const words = text.split(' ');
@@ -31,7 +30,14 @@ function wrapText(text: string, maxLen: number): string[] {
   return result;
 }
 
-function generateCode(project: (typeof projects)[0], index: number): string {
+interface ProjectItem {
+  title: string;
+  description: string;
+  techs: readonly string[];
+  link?: string;
+}
+
+function generateCode(project: ProjectItem, index: number): string {
   const descLines = wrapText(project.description, 40);
   const lines = [
     `import { defineProject } from '@portfolio/core';`,
@@ -51,23 +57,27 @@ function generateCode(project: (typeof projects)[0], index: number): string {
     `  ],`,
     ``,
   ];
-
   if (project.link) {
     lines.push(`  url: '${project.link}',`);
     lines.push(``);
   }
-
   lines.push(`  deploy: {`);
   lines.push(`    platform: '${project.link ? 'vercel' : 'internal'}',`);
   lines.push(`    ci: true,`);
   lines.push(`  },`);
   lines.push(`});`);
-
   return lines.join('\n');
 }
 
 export default function CodeEditor() {
   const [activeTab, setActiveTab] = useState(0);
+  const { t } = useI18n();
+
+  const projects = t.projects_data;
+  const fileNames = useMemo(
+    () => projects.map(p => `${slugify(p.title)}.ts`),
+    [projects],
+  );
 
   const container: React.CSSProperties = {
     backgroundColor: '#1e1e2e',
@@ -79,7 +89,6 @@ export default function CodeEditor() {
     fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
     fontSize: 13,
   };
-
   const titleBar: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
@@ -88,14 +97,12 @@ export default function CodeEditor() {
     backgroundColor: '#181825',
     borderBottom: '1px solid #313244',
   };
-
   const dot = (color: string): React.CSSProperties => ({
     width: 12,
     height: 12,
     borderRadius: '50%',
     backgroundColor: color,
   });
-
   const fileItem = (isActive: boolean): React.CSSProperties => ({
     padding: '6px 12px',
     cursor: 'pointer',
@@ -109,7 +116,6 @@ export default function CodeEditor() {
     transition: 'all 0.15s',
     wordBreak: 'break-all' as const,
   });
-
   const tab = (isActive: boolean): React.CSSProperties => ({
     padding: '8px 12px',
     cursor: 'pointer',
@@ -124,7 +130,6 @@ export default function CodeEditor() {
     transition: 'all 0.15s',
     flexShrink: 0,
   });
-
   const lineNum: React.CSSProperties = {
     color: '#45475a',
     width: 32,
@@ -158,13 +163,12 @@ export default function CodeEditor() {
     </svg>
   );
 
-  const code = generateCode(projects[activeTab], activeTab);
+  const code = generateCode(projects[activeTab] as ProjectItem, activeTab);
   const codeLines = code.split('\n');
 
   const colorize = (line: string) => {
-    if (line.startsWith('import') || line.startsWith('export')) {
+    if (line.startsWith('import') || line.startsWith('export'))
       return <span style={{ color: '#c678dd' }}>{line}</span>;
-    }
     if (line.includes("'") || line.includes('`')) {
       const parts = line.split(/('[^']*'|`[^`]*`)/g);
       return parts.map((part, i) =>
@@ -181,9 +185,6 @@ export default function CodeEditor() {
           </span>
         ),
       );
-    }
-    if (line.trim().startsWith('//')) {
-      return <span style={{ color: '#5c6370' }}>{line}</span>;
     }
     if (
       /^\s*(name|status|description|stack|url|deploy|platform|ci)\s*:/.test(
@@ -208,10 +209,9 @@ export default function CodeEditor() {
         <div style={dot('#febc2e')} />
         <div style={dot('#28c840')} />
         <span style={{ color: '#6c7086', fontSize: 12, marginLeft: 8 }}>
-          VS Code - Projetos
+          VS Code - {t.projects.title}
         </span>
       </div>
-
       <div style={{ display: 'flex', minHeight: 350 }}>
         <div
           className="hidden md:block"
@@ -246,7 +246,6 @@ export default function CodeEditor() {
             </div>
           ))}
         </div>
-
         <div
           style={{
             flex: 1,
@@ -275,7 +274,6 @@ export default function CodeEditor() {
               </div>
             ))}
           </div>
-
           <div
             style={{
               flex: 1,

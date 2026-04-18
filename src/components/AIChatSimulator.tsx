@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef, type ReactNode } from 'react';
+import { useState, useEffect, useRef, useMemo, type ReactNode } from 'react';
 import { useFadeIn } from '../hooks/useFadeIn';
-
-const userMessage = 'O que sabemos sobre o Vitor?';
+import { useI18n } from '../i18n/context';
 
 interface TextPart {
   text: string;
@@ -11,63 +10,27 @@ interface TextPart {
 
 type Line = string | TextPart[];
 
-const aiLines: Line[] = [
-  [
-    { text: 'Vitor Piovezan', bold: true },
-    { text: ' é ' },
-    { text: 'Product Engineer', bold: true },
-    { text: ' e ' },
-    { text: 'AI Engineer', bold: true },
-    {
-      text: ' na Árvore, atuando de ponta a ponta — da ideia à entrega final.',
-    },
-  ],
-  '',
-  'Projeta e implementa sistemas completos, integrando backend, frontend e IA de forma consistente — da modelagem de dados às interfaces finais, com foco em performance, usabilidade e velocidade de entrega.',
-  '',
-  [
-    {
-      text: 'Seu foco está em aplicar IA de forma prática no produto',
-      bold: true,
-    },
-    {
-      text: ', criando desde pipelines com LLMs e RAG até MCP servers customizados para automatizar processos e integrar inteligência aos workflows.',
-    },
-  ],
-  '',
-  'Já desenvolveu soluções como:',
-  [
-    { text: '  - ' },
-    { text: 'Leitura narrada de livros', italic: true },
-    { text: ' com TTS' },
-  ],
-  [
-    { text: '  - ' },
-    { text: 'Chat inteligente', italic: true },
-    { text: ' com dados da plataforma' },
-  ],
-  [
-    { text: '  - ' },
-    { text: 'Ferramentas internas', italic: true },
-    { text: ' para acelerar desenvolvimento' },
-  ],
-  '',
-  [
-    { text: 'Trabalha principalmente com ' },
-    { text: 'Next.js, Expo (React Native) e NestJS', bold: true },
-    {
-      text: ', além de explorar constantemente novas formas de orquestrar IA dentro de produtos reais.',
-    },
-  ],
-  '',
-  [
-    {
-      text: 'Hoje, seu foco é construir produtos completos, rápidos de iterar e com ',
-      italic: true,
-    },
-    { text: 'IA no centro da experiência.', bold: true },
-  ],
-];
+function responseToParts(
+  response: readonly { text: string; bold?: boolean; italic?: boolean }[],
+): Line[] {
+  const lines: Line[] = [];
+  let currentLine: TextPart[] = [];
+
+  for (const part of response) {
+    const segments = part.text.split('\n');
+    segments.forEach((seg, i) => {
+      if (i > 0) {
+        lines.push(currentLine.length > 0 ? currentLine : '');
+        currentLine = [];
+      }
+      if (seg) {
+        currentLine.push({ text: seg, bold: part.bold, italic: part.italic });
+      }
+    });
+  }
+  if (currentLine.length > 0) lines.push(currentLine);
+  return lines;
+}
 
 function linesToPlainText(lines: Line[]): string {
   return lines
@@ -107,18 +70,30 @@ function renderRichLine(line: Line, key: number): ReactNode {
   );
 }
 
-const fullPlainText = linesToPlainText(aiLines);
-
 type Phase = 'user-typing' | 'thinking' | 'ai-streaming' | 'done';
 
 export default function AIChatSimulator() {
   const { ref, isVisible } = useFadeIn(0.2);
+  const { t, locale } = useI18n();
   const [phase, setPhase] = useState<Phase>('user-typing');
   const [userTyped, setUserTyped] = useState('');
   const [charCount, setCharCount] = useState(0);
   const [dots, setDots] = useState('');
   const startedRef = useRef(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const userMessage = t.about.userMessage;
+  const aiLines = useMemo(() => responseToParts(t.about.aiResponse), [locale]);
+  const fullPlainText = useMemo(() => linesToPlainText(aiLines), [aiLines]);
+  const thinkingText = locale === 'pt-BR' ? 'Pensando' : 'Thinking';
+
+  useEffect(() => {
+    setPhase('user-typing');
+    setUserTyped('');
+    setCharCount(0);
+    setDots('');
+    startedRef.current = false;
+  }, [locale]);
 
   useEffect(() => {
     if (!isVisible || startedRef.current) return;
@@ -133,7 +108,7 @@ export default function AIChatSimulator() {
       }
     }, 50);
     return () => clearInterval(typeInterval);
-  }, [isVisible]);
+  }, [isVisible, userMessage]);
 
   useEffect(() => {
     if (phase !== 'thinking') return;
@@ -161,12 +136,11 @@ export default function AIChatSimulator() {
       }
     }, 12);
     return () => clearInterval(streamInterval);
-  }, [phase]);
+  }, [phase, fullPlainText.length]);
 
   useEffect(() => {
-    if (scrollRef.current) {
+    if (scrollRef.current)
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
   }, [charCount, dots, userTyped]);
 
   const visibleLines: Line[] = [];
@@ -213,7 +187,6 @@ export default function AIChatSimulator() {
     margin: '0 auto',
     fontFamily: "'Inter', system-ui, sans-serif",
   };
-
   const header: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
@@ -222,14 +195,12 @@ export default function AIChatSimulator() {
     backgroundColor: '#161b22',
     borderBottom: '1px solid #21262d',
   };
-
   const dotStyle = (color: string): React.CSSProperties => ({
     width: 12,
     height: 12,
     borderRadius: '50%',
     backgroundColor: color,
   });
-
   const chatBody: React.CSSProperties = {
     padding: '24px 20px',
     minHeight: 280,
@@ -239,7 +210,6 @@ export default function AIChatSimulator() {
     flexDirection: 'column',
     gap: 20,
   };
-
   const userBubble: React.CSSProperties = {
     alignSelf: 'flex-end',
     backgroundColor: '#8b5cf6',
@@ -250,13 +220,11 @@ export default function AIChatSimulator() {
     fontSize: 14,
     lineHeight: 1.5,
   };
-
   const aiWrap: React.CSSProperties = {
     display: 'flex',
     gap: 12,
     alignItems: 'flex-start',
   };
-
   const avatar: React.CSSProperties = {
     width: 32,
     height: 32,
@@ -271,7 +239,6 @@ export default function AIChatSimulator() {
     fontSize: 14,
     fontWeight: 700,
   };
-
   const aiBubble: React.CSSProperties = {
     backgroundColor: '#161b22',
     color: '#c9d1d9',
@@ -306,7 +273,6 @@ export default function AIChatSimulator() {
           online
         </span>
       </div>
-
       <div ref={scrollRef} style={chatBody}>
         {userTyped && (
           <div style={userBubble}>
@@ -316,7 +282,6 @@ export default function AIChatSimulator() {
             )}
           </div>
         )}
-
         {(phase === 'thinking' ||
           phase === 'ai-streaming' ||
           phase === 'done') && (
@@ -324,7 +289,10 @@ export default function AIChatSimulator() {
             <div style={avatar}>AI</div>
             <div style={aiBubble}>
               {phase === 'thinking' && (
-                <span style={{ color: '#8b949e' }}>Pensando{dots}</span>
+                <span style={{ color: '#8b949e' }}>
+                  {thinkingText}
+                  {dots}
+                </span>
               )}
               {(phase === 'ai-streaming' || phase === 'done') && (
                 <>
@@ -345,13 +313,7 @@ export default function AIChatSimulator() {
           </div>
         )}
       </div>
-
-      <style>{`
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-      `}</style>
+      <style>{`@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }`}</style>
     </div>
   );
 }
