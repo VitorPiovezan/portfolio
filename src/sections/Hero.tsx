@@ -1,6 +1,5 @@
 import BlurText from '../components/BlurText';
-import GradientText from '../components/GradientText';
-import RotatingText from '../components/RotatingText';
+import TextType from '../components/TextType';
 import Particles from '../components/Particles';
 import TiltWrapper from '../components/TiltWrapper';
 import Magnet from '../components/Magnet';
@@ -139,20 +138,18 @@ export default function Hero() {
 
           <div style={roleRow}>
             <span>Sou</span>
-            <GradientText
-              colors={['#8b5cf6', '#ec4899', '#8b5cf6']}
-              animationSpeed={4}
+            <TextType
+              text={rotatingRoles}
+              typingSpeed={60}
+              deletingSpeed={40}
+              pauseDuration={2000}
+              loop
+              showCursor
+              cursorCharacter="|"
+              cursorClassName="text-accent"
+              textColors={['#8b5cf6']}
               className="text-xl md:text-2xl font-semibold"
-            >
-              <RotatingText
-                texts={rotatingRoles}
-                rotationInterval={2500}
-                staggerDuration={0.03}
-                staggerFrom="first"
-                mainClassName="inline-flex"
-                transition={{ type: 'spring', damping: 30, stiffness: 400 }}
-              />
-            </GradientText>
+            />
           </div>
 
           <BlurText
