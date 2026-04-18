@@ -136,7 +136,7 @@ export default function Hero() {
 
           <BlurText
             text={personalInfo.name}
-            className="text-5xl md:text-7xl font-bold tracking-tight"
+            className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight"
             delay={100}
             animateBy="letters"
           />
