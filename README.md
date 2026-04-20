@@ -71,3 +71,13 @@ export default defineConfig([
   },
 ])
 ```
+
+## Deploy no domínio (`vitorpiovezan.com.br`)
+
+O workflow em `.github/workflows/deploy.yml` faz o build deste site para a **raiz** e, em seguida, clona [VitorPiovezan/my-finance](https://github.com/VitorPiovezan/my-finance), compila com `VITE_BASE_PATH=/my-finance/` e copia o resultado para **`/my-finance/`** no mesmo deploy.
+
+Para o My Finance ter Firebase/login no build, adiciona neste repositório (**portfolio**) os mesmos secrets `VITE_FIREBASE_*` que já usas no repo `my-finance` → **Settings → Secrets and variables → Actions**.
+
+Depois de alterações só no `my-finance`, volta a correr o workflow aqui (**Actions → Deploy to GitHub Pages → Run workflow**) para atualizar a sub-rota, ou faz um commit vazio no `portfolio`.
+
+Opcional: no repositório `my-finance`, podes desativar **Settings → Pages** (ou deixar só para o URL `github.io`) se quiseres que a cópia “oficial” no domínio próprio seja só a deste deploy combinado.
