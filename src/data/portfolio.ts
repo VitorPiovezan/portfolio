@@ -126,6 +126,20 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    title: 'My Finance',
+    description:
+      'App web de finanças pessoais com orçamentos, transações, importação de extratos e resumo patrimonial, com autenticação Firebase.',
+    techs: ['Vite', 'React', 'TypeScript', 'Firebase'],
+    link: 'https://vitorpiovezan.com.br/my-finance/',
+  },
+  {
+    title: 'Árvore Hub',
+    description:
+      'Orquestrador open source para agentes de IA em múltiplos repositórios: config, pipeline e MCPs — projeto da Árvore.',
+    techs: ['Open Source', 'MCP', 'TypeScript', 'CLI'],
+    link: 'https://hub.arvore.com.br/',
+  },
+  {
     title: 'Chat com Dados da Plataforma',
     description:
       'Chat personalizado com IA que conversa com dados da plataforma educacional, permitindo consultas inteligentes sobre conteúdo, métricas e usuários usando RAG.',
@@ -142,13 +156,6 @@ export const projects: Project[] = [
     description:
       'Ferramenta que valida páginas desenvolvidas comparando com designs do Figma, garantindo fidelidade visual pixel a pixel.',
     techs: ['React.js', 'Figma API', 'TypeScript'],
-  },
-  {
-    title: 'Árvore Hub - AI Editors',
-    description:
-      'Docker de IA para editores de texto com inteligência artificial integrada. Contribuidor direto no desenvolvimento da plataforma.',
-    techs: ['AI', 'Docker', 'React.js', 'LLM'],
-    link: 'https://hub.arvore.com.br/ai',
   },
   {
     title: 'MCP Servers',

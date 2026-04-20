@@ -73,6 +73,13 @@ const ptBR = {
   },
   projects: {
     title: 'Projetos',
+    myFinanceModalBody:
+      'My Finance é um app de finanças pessoais: orçamento, lançamentos, importação de extratos e visão geral, com login seguro via Firebase — pensado para uso no dia a dia.',
+    myFinanceModalBtnProject: 'Ver projeto',
+    myFinanceModalBtnLive: 'Abrir app',
+    arvoreHubModalBody:
+      'Na Árvore, o Árvore Hub é open source e orquestra agentes de IA em vários repositórios — como um docker-compose, mas para IA. Você define repos, MCPs e o pipeline (refinar → codar → revisar → testar → PR); descreve a feature e a IA executa tudo até abrir o PR. Sem servidor no meio: o runtime é o seu editor, com memória de time e ferramentas reais. Compatível com Cursor, Kiro e Claude Code.',
+    arvoreHubModalBtnSite: 'Abrir site',
   },
   contact: {
     title: 'Vamos conversar?',
@@ -145,6 +152,23 @@ const ptBR = {
   ],
   projects_data: [
     {
+      title: 'My Finance',
+      description:
+        'App web de finanças pessoais com orçamentos, transações, importação de extratos e resumo patrimonial, com autenticação Firebase.',
+      techs: ['Vite', 'React', 'TypeScript', 'Firebase'],
+      link: 'https://vitorpiovezan.com.br/my-finance/',
+      githubUrl: 'https://github.com/VitorPiovezan/my-finance',
+      detailModal: 'myFinance',
+    },
+    {
+      title: 'Árvore Hub',
+      description:
+        'Orquestrador open source para agentes de IA em múltiplos repositórios: config, pipeline e MCPs — projeto da Árvore.',
+      techs: ['Open Source', 'MCP', 'TypeScript', 'CLI'],
+      link: 'https://hub.arvore.com.br/',
+      detailModal: 'arvoreHub',
+    },
+    {
       title: 'Chat com Dados da Plataforma',
       description:
         'Chat personalizado com IA que conversa com dados da plataforma educacional, permitindo consultas inteligentes sobre conteúdo, métricas e usuários usando RAG.',
@@ -161,13 +185,6 @@ const ptBR = {
       description:
         'Ferramenta que valida páginas desenvolvidas comparando com designs do Figma, garantindo fidelidade visual pixel a pixel.',
       techs: ['React.js', 'Figma API', 'TypeScript'],
-    },
-    {
-      title: 'Árvore Hub - AI Editors',
-      description:
-        'Docker de IA para editores de texto com inteligência artificial integrada. Contribuidor direto no desenvolvimento da plataforma.',
-      techs: ['AI', 'Docker', 'React.js', 'LLM'],
-      link: 'https://hub.arvore.com.br/ai',
     },
     {
       title: 'MCP Servers',
@@ -257,6 +274,13 @@ const enUS: typeof ptBR = {
   },
   projects: {
     title: 'Projects',
+    myFinanceModalBody:
+      'My Finance is a personal finance web app for budgets, transactions, statement import and a simple overview — with secure Firebase authentication for everyday use.',
+    myFinanceModalBtnProject: 'View project',
+    myFinanceModalBtnLive: 'Open app',
+    arvoreHubModalBody:
+      'At Árvore, Árvore Hub is open source and orchestrates AI agents across repositories — like docker-compose, but for AI. You declare repos, MCPs, and the pipeline (refine → code → review → test → PR); describe the feature and the AI runs the full flow to open the PR. No server in the middle: your editor is the runtime, with team memory and real tooling. Works with Cursor, Kiro, and Claude Code.',
+    arvoreHubModalBtnSite: 'Visit site',
   },
   contact: {
     title: "Let's talk?",
@@ -322,6 +346,23 @@ const enUS: typeof ptBR = {
   ],
   projects_data: [
     {
+      title: 'My Finance',
+      description:
+        'Personal finance web app with budgets, transactions, statement import and a net-worth snapshot, powered by Firebase auth.',
+      techs: ['Vite', 'React', 'TypeScript', 'Firebase'],
+      link: 'https://vitorpiovezan.com.br/my-finance/',
+      githubUrl: 'https://github.com/VitorPiovezan/my-finance',
+      detailModal: 'myFinance',
+    },
+    {
+      title: 'Árvore Hub',
+      description:
+        'Open-source orchestrator for AI agents across multiple repos: config, pipeline, and MCPs — an Árvore project.',
+      techs: ['Open Source', 'MCP', 'TypeScript', 'CLI'],
+      link: 'https://hub.arvore.com.br/',
+      detailModal: 'arvoreHub',
+    },
+    {
       title: 'Platform Data Chat',
       description:
         'Custom AI chat that talks to educational platform data, enabling intelligent queries about content, metrics and users using RAG.',
@@ -338,13 +379,6 @@ const enUS: typeof ptBR = {
       description:
         'Tool that validates developed pages by comparing them with Figma designs, ensuring pixel-perfect visual fidelity.',
       techs: ['React.js', 'Figma API', 'TypeScript'],
-    },
-    {
-      title: 'Árvore Hub - AI Editors',
-      description:
-        'AI Docker for text editors with integrated artificial intelligence. Direct contributor to the platform development.',
-      techs: ['AI', 'Docker', 'React.js', 'LLM'],
-      link: 'https://hub.arvore.com.br/ai',
     },
     {
       title: 'MCP Servers',

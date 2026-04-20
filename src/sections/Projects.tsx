@@ -32,7 +32,7 @@ export default function Projects() {
   const { t } = useI18n();
 
   return (
-    <section id="projects" style={section}>
+    <section id="projects" className="portfolio-snap-section" style={section}>
       {!isMobile && (
         <div style={bgLayer}>
           <Particles

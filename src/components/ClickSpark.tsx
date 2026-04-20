@@ -8,6 +8,7 @@ interface ClickSparkProps {
   duration?: number;
   easing?: 'linear' | 'ease-in' | 'ease-out' | 'ease-in-out';
   extraScale?: number;
+  className?: string;
   children?: React.ReactNode;
 }
 
@@ -26,6 +27,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
   duration = 400,
   easing = 'ease-out',
   extraScale = 1.0,
+  className = '',
   children
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -151,7 +153,10 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
   };
 
   return (
-    <div className="relative w-full h-full" onClick={handleClick}>
+    <div
+      className={`relative flex w-full min-h-0 flex-1 flex-col ${className}`.trim()}
+      onClick={handleClick}
+    >
       <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
       {children}
     </div>

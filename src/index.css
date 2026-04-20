@@ -13,9 +13,14 @@
 
 html {
   scroll-behavior: auto;
+  height: 100%;
 }
 
+/* Documento sem scroll duplo — o snap vive em .portfolio-scroll-root */
 body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
   background-color: #0a0a0f;
   color: #f1f5f9;
   font-family:
@@ -27,15 +32,65 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-::-webkit-scrollbar {
+#root {
+  height: 100%;
+  min-height: 100dvh;
+}
+
+/*
+ * Scroll-snap precisa viver no elemento que REALMENTE rola (overflow-y: auto) e,
+ * em layout flex, de flex-1 + min-height: 0 no caminho — senão o bloco cresce
+ * com o conteúdo e o scroll vai parar no window (snap some).
+ */
+.portfolio-scroll-root {
+  box-sizing: border-box;
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scroll-snap-type: y mandatory;
+  -webkit-scroll-snap-type: y mandatory;
+  scroll-padding-top: 64px;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-scroll-root {
+    scroll-snap-type: y proximity;
+    -webkit-scroll-snap-type: y proximity;
+  }
+}
+
+.portfolio-snap-section {
+  box-sizing: border-box;
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  scroll-margin-top: 0;
+}
+
+/* Contato: altura só do conteúdo (pode ser menor que a viewport) */
+.portfolio-snap-section--natural {
+  min-height: unset;
+}
+
+.portfolio-scroll-root main {
+  overflow-anchor: none;
+}
+
+::-webkit-scrollbar,
+.portfolio-scroll-root::-webkit-scrollbar {
   width: 6px;
 }
 
-::-webkit-scrollbar-track {
+::-webkit-scrollbar-track,
+.portfolio-scroll-root::-webkit-scrollbar-track {
   background: #0a0a0f;
 }
 
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb,
+.portfolio-scroll-root::-webkit-scrollbar-thumb {
   background: #1e1e2e;
   border-radius: 3px;
 }

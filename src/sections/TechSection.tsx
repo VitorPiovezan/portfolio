@@ -46,7 +46,7 @@ export default function TechSection() {
   const { t } = useI18n();
 
   return (
-    <section id="tech" style={wrap}>
+    <section id="tech" className="portfolio-snap-section" style={wrap}>
       {!isMobile && (
         <div style={bgLayer}>
           <Aurora

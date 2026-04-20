@@ -32,7 +32,11 @@ export default function Experience() {
   const { t } = useI18n();
 
   return (
-    <section id="experience" style={section}>
+    <section
+      id="experience"
+      className="portfolio-snap-section"
+      style={section}
+    >
       {!isMobile && (
         <div style={bgLayer}>
           <Particles

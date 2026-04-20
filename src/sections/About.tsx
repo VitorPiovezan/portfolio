@@ -33,7 +33,7 @@ export default function About() {
   const { t } = useI18n();
 
   return (
-    <section id="about" style={section}>
+    <section id="about" className="portfolio-snap-section" style={section}>
       {!isMobile && (
         <div style={bgLayer}>
           <Aurora

@@ -1,5 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useI18n } from '../i18n/context';
+import MyFinanceProjectModal from './MyFinanceProjectModal';
+import ArvoreHubProjectModal from './ArvoreHubProjectModal';
 
 function slugify(title: string) {
   return title
@@ -30,11 +32,15 @@ function wrapText(text: string, maxLen: number): string[] {
   return result;
 }
 
+type ProjectDetailModalKind = 'myFinance' | 'arvoreHub';
+
 interface ProjectItem {
   title: string;
   description: string;
   techs: readonly string[];
   link?: string;
+  githubUrl?: string;
+  detailModal?: ProjectDetailModalKind;
 }
 
 function generateCode(project: ProjectItem, index: number): string {
@@ -61,8 +67,19 @@ function generateCode(project: ProjectItem, index: number): string {
     lines.push(`  url: '${project.link}',`);
     lines.push(``);
   }
+  if (project.githubUrl) {
+    lines.push(`  repoUrl: '${project.githubUrl}',`);
+    lines.push(``);
+  }
+  const deployPlatform = project.githubUrl
+    ? 'github-pages'
+    : project.detailModal === 'arvoreHub'
+      ? 'hub'
+      : project.link
+        ? 'vercel'
+        : 'internal';
   lines.push(`  deploy: {`);
-  lines.push(`    platform: '${project.link ? 'vercel' : 'internal'}',`);
+  lines.push(`    platform: '${deployPlatform}',`);
   lines.push(`    ci: true,`);
   lines.push(`  },`);
   lines.push(`});`);
@@ -71,6 +88,7 @@ function generateCode(project: ProjectItem, index: number): string {
 
 export default function CodeEditor() {
   const [activeTab, setActiveTab] = useState(0);
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
   const { t } = useI18n();
 
   const projects = t.projects_data;
@@ -163,8 +181,33 @@ export default function CodeEditor() {
     </svg>
   );
 
-  const code = generateCode(projects[activeTab] as ProjectItem, activeTab);
+  const current = projects[activeTab] as ProjectItem;
+  const code = generateCode(current, activeTab);
   const codeLines = code.split('\n');
+
+  const detailKind = current.detailModal;
+  const showProjectDetailFab =
+    detailKind === 'myFinance'
+      ? Boolean(current.githubUrl && current.link)
+      : detailKind === 'arvoreHub'
+        ? Boolean(current.link)
+        : false;
+
+  const detailFabLabel =
+    detailKind === 'arvoreHub'
+      ? 'Árvore Hub'
+      : detailKind === 'myFinance'
+        ? 'My Finance'
+        : '';
+
+  useEffect(() => {
+    if (!detailModalOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setDetailModalOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [detailModalOpen]);
 
   const colorize = (line: string) => {
     if (line.startsWith('import') || line.startsWith('export'))
@@ -187,7 +230,7 @@ export default function CodeEditor() {
       );
     }
     if (
-      /^\s*(name|status|description|stack|url|deploy|platform|ci)\s*:/.test(
+      /^\s*(name|status|description|stack|url|repoUrl|deploy|platform|ci)\s*:/.test(
         line,
       )
     ) {
@@ -202,8 +245,26 @@ export default function CodeEditor() {
     return <span style={{ color: '#abb2bf' }}>{line}</span>;
   };
 
+  const detailBtn: React.CSSProperties = {
+    position: 'absolute',
+    right: 12,
+    bottom: 12,
+    zIndex: 2,
+    padding: '8px 14px',
+    borderRadius: 8,
+    border: '1px solid rgba(139, 92, 246, 0.45)',
+    backgroundColor: 'rgba(139, 92, 246, 0.2)',
+    color: '#cdd6f4',
+    fontSize: 11,
+    fontWeight: 600,
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    boxShadow: '0 2px 12px rgba(0,0,0,0.35)',
+    transition: 'background-color 0.15s, border-color 0.15s',
+  };
+
   return (
-    <div style={container}>
+    <div style={{ ...container, position: 'relative' }}>
       <div style={titleBar}>
         <div style={dot('#ff5f57')} />
         <div style={dot('#febc2e')} />
@@ -239,7 +300,10 @@ export default function CodeEditor() {
             <div
               key={name}
               style={fileItem(i === activeTab)}
-              onClick={() => setActiveTab(i)}
+              onClick={() => {
+                setActiveTab(i);
+                setDetailModalOpen(false);
+              }}
             >
               {tsIcon}
               <span>{name}</span>
@@ -252,6 +316,7 @@ export default function CodeEditor() {
             display: 'flex',
             flexDirection: 'column',
             minWidth: 0,
+            position: 'relative',
           }}
         >
           <div
@@ -266,7 +331,10 @@ export default function CodeEditor() {
               <div
                 key={name}
                 style={tab(i === activeTab)}
-                onClick={() => setActiveTab(i)}
+                onClick={() => {
+                  setActiveTab(i);
+                  setDetailModalOpen(false);
+                }}
               >
                 {tsIcon}
                 <span className="hidden sm:inline">{name}</span>
@@ -278,6 +346,7 @@ export default function CodeEditor() {
             style={{
               flex: 1,
               padding: '16px 0',
+              paddingBottom: showProjectDetailFab ? 52 : 16,
               overflowX: 'auto',
               overflowY: 'auto',
             }}
@@ -296,8 +365,47 @@ export default function CodeEditor() {
               </div>
             ))}
           </div>
+          {showProjectDetailFab && detailFabLabel && (
+            <button
+              type="button"
+              style={detailBtn}
+              aria-haspopup="dialog"
+              aria-expanded={detailModalOpen}
+              onClick={() => setDetailModalOpen(true)}
+              onMouseEnter={e => {
+                e.currentTarget.style.backgroundColor =
+                  'rgba(139, 92, 246, 0.35)';
+                e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.75)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.backgroundColor =
+                  'rgba(139, 92, 246, 0.2)';
+                e.currentTarget.style.borderColor =
+                  'rgba(139, 92, 246, 0.45)';
+              }}
+            >
+              {detailFabLabel}
+            </button>
+          )}
         </div>
       </div>
+      {detailKind === 'myFinance' &&
+        current.githubUrl &&
+        current.link && (
+          <MyFinanceProjectModal
+            open={detailModalOpen}
+            onClose={() => setDetailModalOpen(false)}
+            githubUrl={current.githubUrl}
+            liveUrl={current.link}
+          />
+        )}
+      {detailKind === 'arvoreHub' && current.link && (
+        <ArvoreHubProjectModal
+          open={detailModalOpen}
+          onClose={() => setDetailModalOpen(false)}
+          liveUrl={current.link}
+        />
+      )}
     </div>
   );
 }

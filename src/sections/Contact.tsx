@@ -64,7 +64,11 @@ export default function Contact() {
   const { t } = useI18n();
 
   return (
-    <section id="contact" style={section}>
+    <section
+      id="contact"
+      className="portfolio-snap-section portfolio-snap-section--natural"
+      style={section}
+    >
       {!isMobile && (
         <div style={bgLayer}>
           <Aurora
