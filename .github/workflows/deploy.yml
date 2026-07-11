@@ -1,8 +1,10 @@
-# Publica o portfólio na raiz do domínio e embute o app my-finance em /my-finance/
-# (build do repo VitorPiovezan/my-finance copiado para dist/my-finance/).
+# Publica o portfólio na raiz do domínio e embute os apps em suas rotas:
+# - /my-finance/ → repo VitorPiovezan/my-finance
+# - /hertz-wo/   → repo VitorPiovezan/hertz-wo
 #
-# Secrets: copie no repositório portfolio os mesmos VITE_FIREBASE_* que usa em my-finance
-# (Settings → Secrets and variables → Actions), para o build do app manter login/Firebase.
+# Secrets necessários neste repo (Settings → Secrets and variables → Actions):
+# VITE_FIREBASE_* para my-finance
+# NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY para hertz-wo
 
 name: Deploy to GitHub Pages
 
@@ -69,6 +71,32 @@ jobs:
         run: |
           mkdir -p dist/my-finance
           cp -a .tmp-my-finance/dist/. dist/my-finance/
+
+      - name: Checkout hertz-wo
+        uses: actions/checkout@v4
+        with:
+          repository: VitorPiovezan/hertz-wo
+          ref: main
+          path: .tmp-hertz-wo
+
+      - name: Setup Node (npm) for hertz-wo
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: .tmp-hertz-wo/package-lock.json
+
+      - name: Build hertz-wo
+        working-directory: .tmp-hertz-wo
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+        run: npm ci && npm run build
+
+      - name: Embed hertz-wo into site
+        run: |
+          mkdir -p dist/hertz-wo
+          cp -a .tmp-hertz-wo/out/. dist/hertz-wo/
 
       - uses: actions/upload-pages-artifact@v3
         with:
